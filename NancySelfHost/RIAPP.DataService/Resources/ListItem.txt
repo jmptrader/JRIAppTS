@@ -1,0 +1,6 @@
+﻿export class {{LIST_ITEM_NAME}} extends collMOD.CollectionItem<collMOD.ListItemAspect<{{LIST_ITEM_NAME}}, {{INTERFACE_NAME}}>> implements collMOD.IListItem, {{INTERFACE_NAME}} {
+{{ITEM_PROPS}}
+	toString() {
+		return '{{LIST_ITEM_NAME}}';
+	}
+}

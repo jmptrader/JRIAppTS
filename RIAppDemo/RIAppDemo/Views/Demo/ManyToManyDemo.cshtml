@@ -1,0 +1,606 @@
+﻿@using System.Text
+@using RIAPP.DataService
+@using RIAppDemo.BLL.DataServices
+@using RIAppDemo.Utils
+
+@{
+    Layout = "~/Views/Shared/_LayoutDemo.cshtml";
+}
+@{
+    ViewBag.Title = "ManyToMany Demo ";
+}
+
+@section CssImport
+{
+}
+
+@section JSImport
+{
+    <script src="@Url.Content("~/Scripts/RIAppDemo/common.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/demoDB.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/autocomplete.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/manToManDemo.js",true)" type="text/javascript"></script>
+}
+<style type="text/css">
+    .space {
+        width: 10px;
+        display: inline-block;
+    }
+
+    #demoHeader label {
+        color: Blue;
+    }
+
+    #demoContent {
+        overflow: visible;
+        height: 760px;
+        vertical-align: top;
+        position: relative;
+    }
+
+    #leftPanel {
+        overflow: auto;
+        overflow-y: hidden;
+        height: 95%;
+        vertical-align: top;
+        display: inline-block;
+        width: 20%;
+    }
+
+    #rightPanel {
+        overflow: auto;
+        height: 95%;
+        vertical-align: top;
+        display: inline-block;
+        width: 79%;
+    }
+
+    .customerTableWrap {
+        height: 97%;
+        width: 100%;
+    }
+
+    .addressTableWrap {
+        height: 200px;
+        width: 100%;
+    }
+
+    .addressTableHeader {
+    }
+
+    .autocompleteTableWrap {
+        height: 180px;
+        width: 100%;
+    }
+
+    .autocompleteTableHeader {
+        display: none;
+    }
+
+    .findAddrTableWrap {
+        height: 95%;
+        width: 100%;
+    }
+
+    #customerInfo {
+        padding: 2px;
+        margin: 2px;
+        width: 98%;
+    }
+
+    #customerInfo fieldset {
+       border-radius: 5px;
+    }
+
+    #customerInfo fieldset legend {
+        color: Blue;
+        font-weight: bold;
+    }
+
+    .custInfo {
+        color: Blue;
+    }
+
+    .custEdit {
+    }
+
+    #customerAddr {
+        padding: 2px;
+        margin: 2px;
+        width: 98%;
+    }
+
+    #customerAddr fieldset {
+        border-radius: 5px;
+    }
+
+    #customerAddr fieldset legend {
+        color: Blue;
+        font-weight: bold;
+    }
+
+    table.ria-data-table tr .addressTemplate {
+        padding: 5px;
+        height: 195px;
+    }
+
+    table.ria-data-table tr.row-highlight .addressTemplate {
+    }
+
+    table.ria-data-table tr .addressTemplate input[type="text"] {
+        max-width: 200px;
+    }
+
+    table.ria-data-table tr .addressLine {
+        margin-bottom: 2px;
+        margin-top: 2px;
+    }
+
+    table.ria-data-table tr .addressLabel {
+        display: inline-block;
+        width: 9em;
+    }
+
+    table.ria-data-table tr .address {
+        color: Blue;
+    }
+
+    table.ria-data-table tr.row-highlight .address {
+        color: Aqua;
+    }
+
+    #leftPanel table.ria-data-table tr:nth-child(even) {
+        background-color: #ECF2F6;
+    }
+
+    div.ria-dataform .addressLine {
+        margin-bottom: 2px;
+        margin-top: 2px;
+    }
+
+    div.ria-dataform .addressLabel {
+        display: block;
+        width: 9em;
+        color: Blue;
+    }
+
+    div.ria-dataform .address {
+        width: 60%;
+    }
+
+    .stackPanelItem {
+        width: 170px;
+    }
+
+    .stackPanelItem fieldset {
+        border-radius: 5px;
+    }
+
+    .stackPanelItem fieldset legend {
+        color: Blue;
+        font-weight: bold;
+    }
+</style>
+
+
+<script type="text/javascript">
+    /*
+      //this is declared in MDETDEMO module
+       export var mainOptions: IMainOptions = {
+            service_url: null,
+            permissionInfo: null,
+            images_path: null
+        };
+
+        //The Application is also declared and started in there 
+    */
+    (function(ops){
+        ops.images_path = '@Url.Content("~/Scripts/jriapp/img/")';
+        ops.service_url = '@Url.RouteUrl("Default",new {controller="RIAppDemoService", action=""})';
+        ops.permissionInfo =  @Html.Action("PermissionsInfo", "RIAppDemoService");
+    })(RIAPP.MTMDEMO.mainOptions);
+   
+</script>
+
+<h2  style="display:inline-block;">@ViewBag.Title</h2>
+
+<div id="demoContent" data-bind="{this.isBusy,to=dbContext.isBusy}" data-view="name=busy_indicator">
+    <div id="leftPanel">
+        <div style="height: 97%; vertical-align: top;">
+            <table data-name="gridCustomers" data-bind="{this.dataSource,to=dbSet,source=customerVM}" data-view="options={wrapCss:customerTableWrap,isHandleAddNew:true,editor:{templateID:customerEditTemplate,width:550,height:650,submitOnOK:true,title:'Customer editing'}}">
+                <thead>
+                    <tr>
+                        <th data-column="width:50px,type:row_actions" />
+                        <th data-column="width:90%,sortable:true,title:Customer Name,sortMemberName=LastName;MiddleName;FirstName" data-content="fieldName:ComplexProp.Name,readOnly:true" />
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="rightPanel">
+        <div id="customerInfo" style="max-width:800px;" data-bind="{this.dataContext,to=currentItem,source=customerVM}" data-view="name=dataform">
+            <fieldset>
+                <legend>Customer Info</legend>
+                <table style="width: 100%; border: none; table-layout: fixed; background-color: transparent;">
+                    <colgroup>
+                        <col style="width: 125px; border: none; text-align: left;" />
+                        <col style="width: 100%; border: none; text-align: left;" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>ID:</td>
+                            <td><span data-content="fieldName:CustomerID,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Title:</td>
+                            <td><span data-content="fieldName:Title,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>FirstName:</td>
+                            <td><span data-content="fieldName:ComplexProp.FirstName,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>MiddleName:</td>
+                            <td><span data-content="fieldName:ComplexProp.MiddleName,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>LastName:</td>
+                            <td><span data-content="fieldName:ComplexProp.LastName,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Suffix:</td>
+                            <td><span data-content="fieldName:Suffix,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>CompanyName:</td>
+                            <td><span data-content="fieldName:CompanyName,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>SalesPerson:</td>
+                            <td><span data-content="template={displayID=salespersonTemplate1},css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td><span data-content="fieldName=ComplexProp.ComplexProp.EmailAddress,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td><span data-content="fieldName:ComplexProp.ComplexProp.Phone,readOnly:true,css:{displayCss:'custInfo'}"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-info btn-small" style="float: right; margin: 5px;" data-bind="{this.command,to=addNewCommand,mode=OneWay,source=customerVM}"><i class="icon-plus"></i>&nbsp;New Customer</button>
+            </fieldset>
+        </div>
+        <!--customerDetails-->
+        <div id="customerAddr" style="max-width:800px;">
+            <fieldset>
+                <legend>Customer Addresses</legend>
+                <table data-name="gridCustAddr" data-bind="{this.dataSource,to=custAdressView,source=customerVM.customerAddressVM}" data-view="options={wrapCss:addressTableWrap,headerCss:addressTableHeader}">
+                    <thead>
+                        <tr>
+                <!--we can use one column with templated data content or several ordinary columns-->
+                <!--
+                    <th data-column="width:100%,title=Address,sortable:true,sortMemberName=AddressLine" data-content="template={displayID:addressTemplate, editID:addressTemplate}"/>
+                -->
+                            <th data-column="width:10%,title=Type,sortable:true,sortMemberName=AddressType;AddressLine" data-content="fieldName:AddressType,readOnly:true" ></th>
+                            <th data-column="width:20%,title=Address1,sortable:true" data-content="fieldName:Address.AddressLine1,readOnly:true" ></th>
+                            <th data-column="width:20%,title=Address2,sortable:true" data-content="fieldName:Address.AddressLine2,readOnly:true" ></th>
+                            <th data-column="width:15%,title=City,sortable:true,sortMemberName=Address.City;Address.AddressLine1" data-content="fieldName:Address.City,readOnly:true" ></th>
+                            <th data-column="width:15%,title=State,sortable:true,sortMemberName=Address.StateProvince;Address.AddressLine1" data-content="fieldName:Address.StateProvince,readOnly:true" ></th>
+                            <th data-column="width:10%,title=Region,sortable:false" data-content="fieldName:Address.CountryRegion,readOnly:true" ></th>
+                            <th data-column="width:10%,title=Zip,sortable:false" data-content="fieldName:Address.PostalCode,readOnly:true" ></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button class="btn btn-info btn-small" style="float: right; margin: 5px;" data-bind="{this.command,to=addNewCommand,source=customerVM.customerAddressVM.addAddressVM}">Manage Addresses</button>
+            </fieldset>
+        </div>
+        <!--customerAddr-->
+        <!--
+           //example of using stackpanel for horizontal list view
+           <div style="width:100%; overflow:auto;" data-bind="{this.dataSource,to=custAdressView,source=customerVM.custAddrVM}" data-view="name=stackpanel,options:{templateID:stackPanelItemTemplate,orientation:horizontal}"></div>
+         -->
+    </div>
+    <!--right panel-->
+
+    <div style="margin-top: 0px; text-align: left; border: none; width: 100%; height: 40px;">
+        <!--pager-->
+        <div style="float: left;" data-bind="{this.dataSource,to=dbSet,source=customerVM}" data-view="name=pager,options={sliderSize:10,hideOnSinglePage=false}"></div>
+        <div style="float: left; padding-left: 10px; padding-top: 10px;"><span>Total:</span>&nbsp;<span data-bind="{this.value,to=totalCount,source=customerVM.dbSet}"></span></div>
+    </div>
+ </div>
+
+@section RiaTemplates
+{
+    <div id="customerEditTemplate" style="width: 100%; margin:0px;" data-role="template">
+        <form action="#" style="width: 100%" data-bind="{this.dataContext}" data-view="name=dataform">
+            <table style="width: 95%; border: none; table-layout: fixed; background-color: transparent;">
+                <colgroup>
+                    <col style="width: 125px; border: none; text-align: left;" />
+                    <col style="width: 100%; border: none; text-align: left;" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td>ID:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:CustomerID,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Title:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:Title,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FirstName:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:ComplexProp.FirstName,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MiddleName:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:ComplexProp.MiddleName,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LastName:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:ComplexProp.LastName,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Suffix:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:Suffix,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>CompanyName:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:CompanyName,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SalesPerson:
+                        </td>
+                        <td>
+                            <span data-content="template={displayID=salespersonTemplate1,editID=salespersonTemplate2},css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email:
+                        </td>
+                        <td>
+                            <span data-content="fieldName=ComplexProp.ComplexProp.EmailAddress,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone:
+                        </td>
+                        <td>
+                            <span data-content="fieldName:ComplexProp.ComplexProp.Phone,css:{displayCss:'custInfo',editCss:'custEdit'}"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <div id="salespersonTemplate1" data-role="template">
+        <span data-bind="{this.value,to=SalesPerson}"></span>
+    </div>
+
+    <div id="salespersonTemplate2" data-role="template">
+        <input type="text" style="margin-left: 0px; width:200px;" data-bind="{this.value,to=SalesPerson,mode=TwoWay}{this.dataContext}"
+            data-view="name=autocomplete,options={fieldName:SalesPerson,dbContext:dbContext,dbSetName:SalesInfo,queryName:ReadSalesInfo,templateId:salePerAutocompleteTemplate,width:200px,height:250px}" />
+        &nbsp;<span style="color: Gray;">&lt;--autocomplete here</span>
+    </div>
+
+    @*example of autocomplete implementation*@
+    <div id="salePerAutocompleteTemplate" data-role="template" style="height: 97%; margin: 0px; padding: 2px; position: relative;">
+        <div style="position: relative; margin-left: 1px; vertical-align: top;"
+            data-bind="{this.isBusy,to=isLoading}" data-view="name=busy_indicator">
+            <table style="position: relative" data-name="lookupGrid" data-bind="{this.dataSource,to=gridDataSource}"
+                data-view="options={wrapCss:autocompleteTableWrap,headerCss:autocompleteTableHeader}">
+                <thead>
+                    <tr>
+                        <th data-column="width:100%,sortable:true,title:Name" data-content="fieldName:SalesPerson"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div style="position: relative; text-align: left;">
+            <!--pager-->
+            <div style="float: left;" data-bind="{this.dataSource,to=gridDataSource}" data-view="name=pager,options={sliderSize:4,hideOnSinglePage=true}">
+            </div>
+            <div style="float: left; padding-left: 10px; padding-top: 10px;">
+                <span>Total:</span>&nbsp;<span data-bind="{this.value,to=gridDataSource.totalCount}"></span>
+            </div>
+        </div>
+        <br style="clear: left" />
+        <div style="position: absolute; left: 15px; text-align: center; margin-top: 4px; bottom: 4px;">
+            <a class="btn btn-info btn-small" style="width: 50px;" data-name="btnOk" data-bind="{this.text,to=txtOk,source=TEXT}"><i class="icon-ok"></i></a><span class="space"></span>
+            <a class="btn btn-info btn-small" style="width: 50px;" data-name="btnCancel" data-bind="{this.text,to=txtCancel,source=TEXT}"><i class="icon-remove"></i></a>
+        </div>
+    </div>
+
+    @*used for display of customer's address on the right panel*@
+    <div id="addressTemplate" data-role="template" class="addressTemplate">
+        <fieldset>
+            <legend style="margin-bottom: 4px; font-size: 14px; font-weight: bold;"><span class="address"
+                data-bind="{this.value,to=AddressType}"></span></legend>
+            <!-- we can use dataform to assign to it datacontext that is other than inside this template.
+      the look of the form changes to editing when the current entity is began editing
+  -->
+            <form action="#" style="width: 100%" data-bind="{this.dataContext,to=Address}" data-view="name=dataform">
+            <dl class="dl-horizontal">
+                <dt><span class="addressLabel">AddressLine1:</span></dt>
+                <dd>
+                    <!--inside data form we can use span tag with data-content attribute-->
+                    <span class="address" data-content="fieldName:AddressLine1"></span>
+                </dd>
+                <dt><span class="addressLabel">AddressLine2:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:AddressLine2"></span>
+                </dd>
+                <dt><span class="addressLabel">City:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:City"></span>
+                </dd>
+                <dt><span class="addressLabel">StateProvince:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:StateProvince"></span>
+                </dd>
+                <dt><span class="addressLabel">CountryRegion:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:CountryRegion"></span>
+                </dd>
+                <dt><span class="addressLabel">PostalCode:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:PostalCode"></span>
+                </dd>
+            </dl>
+            </form>
+        </fieldset>
+    </div>
+
+    <!--addressTemplate-->
+    @*used for managing of customer's addresses in many to many relationship*@
+    <div id="addAddressTemplate" style="width: 95%; margin:4px;" data-role="template">
+        <div style="margin-bottom: 4px;">
+            <span>Customer:</span>&nbsp;<span style="font-weight: bold; color: Blue;" data-bind="{this.value,to=customer.ComplexProp.Name}"></span>
+        </div>
+        <div data-name="search" data-bind="{this.isVisible,to=isAddingNew,converter=notConverter}">
+            <div style="width: 100%; margin: 5px 0px 5px 0px;">
+                <span class="addressLabel">Search existing Address:</span>
+                <input type="text" class="span2" data-bind="{this.value,to=searchString,mode=TwoWay}{this.toolTip,to=searchToolTip}" />
+                <a class="btn btn-info btn-small" data-bind="{this.command,to=execSearchCommand}"><i
+                    class="icon-search"></i></a>
+            </div>
+            <div style="width: 100%; height: 400px;">
+                <table style="border: none; border-collapse: collapse; table-layout: fixed;">
+                    <tr>
+                        <!--left section - already linked to customer addresses -->
+                        <td style="vertical-align: top;">
+                            <div style="vertical-align: top; width: 350px; height: 310px;">
+                                <table data-name="gridCustAddr" data-bind="{this.dataSource,to=custAdressView,source=customerVM.customerAddressVM}"
+                                    data-view="options={wrapCss:findAddrTableWrap,isCanDelete=false,isCanEdit=true,isUseScrollInto=false}">
+                                    <thead>
+                                        <tr>
+                                            <th data-column="width:50px,type:row_actions" ></th>
+                                            <th data-column="width:40%,title=AddressType" data-content="fieldName:AddressType" ></th>
+                                            <th data-column="width:60%,title=Address,sortable:true" data-content="fieldName:Address.AddressLine1" ></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <!--middle section - buttons -->
+                        <td style="vertical-align: middle; text-align: center;">
+                            <div style="padding: 3px">
+                                <a class="btn btn-info btn-small" data-bind="{this.command,to=linkCommand}"><i class="icon-hand-left">
+                                </i></a>
+                            </div>
+                            <div style="padding: 3px">
+                                <a class="btn btn-info btn-small" data-bind="{this.command,to=unLinkCommand}"><i
+                                    class="icon-hand-right"></i></a>
+                            </div>
+                        </td>
+                        <!--right section AddressInfos -->
+                        <td style="vertical-align: top;">
+                            <div style="vertical-align: top; height: 310px;">
+                                <table style="position: relative" data-bind="{this.dataSource,to=addressInfosView}{this.propChangedCommand,to=propChangeCommand}"
+                                    data-view="options={wrapCss:findAddrTableWrap}">
+                                    <thead>
+                                        <tr>
+                                            <th data-column="width:100%,sortable:true,title:Address" data-content="fieldName:AddressLine1" ></th>
+                                            <th data-column="width:100%,sortable:true,title:City,sortMemberName=City;AddressLine1"
+                                                data-content="fieldName:City" ></th>
+                                            <th data-column="width:100%,sortable:true,title:CountryRegion,sortMemberName=CountryRegion;City;AddressLine1"
+                                                data-content="fieldName:CountryRegion" ></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a class="btn btn-info btn-small" data-bind="{this.command,to=addNewAddressCommand}">
+                                <i class="icon-plus"></i>&nbsp;New Address</a>
+                        </td>
+                        <td>
+                            <div style="margin-top: 3px; margin-bottom: 5px; text-align: left; border: none;
+                                width: 100%; height: 40px;">
+                                <!--pager-->
+                                <div style="float: left;" data-bind="{this.dataSource,to=addressInfosView}" data-view="name=pager,options={sliderSize:10}">
+                                </div>
+                                <div style="float: left; padding-left: 10px; padding-top: 10px;">
+                                    <span>Total:</span>&nbsp;<span data-bind="{this.value,to=addressInfosView.totalCount}"></span></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--will be visible only when adding new address-->
+        <div data-name="newAddress" style="width: 95%; height:95%;" data-bind="{this.isVisible,to=isAddingNew}">
+            <form action="#" style="width: 100%" data-bind="{this.dataContext,to=newAddress}"
+            data-view="name=dataform">
+            <dl class="dl-horizontal">
+                <dt><span class="addressLabel">AddressLine1:</span></dt>
+                <dd>
+                    <!--inside data form we can use span tag with data-content attribute-->
+                    <span class="address" data-content="fieldName:AddressLine1"></span>
+                </dd>
+                <dt><span class="addressLabel">AddressLine2:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:AddressLine2"></span>
+                </dd>
+                <dt><span class="addressLabel">City:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:City"></span>
+                </dd>
+                <dt><span class="addressLabel">StateProvince:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:StateProvince"></span>
+                </dd>
+                <dt><span class="addressLabel">CountryRegion:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:CountryRegion"></span>
+                </dd>
+                <dt><span class="addressLabel">PostalCode:</span></dt>
+                <dd>
+                    <span class="address" data-content="fieldName:PostalCode"></span>
+                </dd>
+            </dl>
+            </form>
+        </div>
+    </div>
+
+    <div id="stackPanelItemTemplate" data-role="template" class="stackPanelItem" style="width: 200px;">
+        <fieldset>
+            <legend><span class="address" data-bind="{this.value,to=AddressType}"></span></legend>
+            <span data-bind="{this.value,to=AddressLine}"></span>&nbsp;<a data-bind="{this.command,to=helpCommand,source=customerVM},{this.commandParam}" data-view="options={tip='click me for help!',linkimg='@Url.Content("~/Scripts/jriapp/img/help.gif")'}">help</a>
+        </fieldset>
+    </div>
+}

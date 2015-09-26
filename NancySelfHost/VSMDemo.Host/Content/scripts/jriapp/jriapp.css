@@ -1,0 +1,318 @@
+﻿ .ria-nobr {white-space: nowrap}
+ .ria-template {display:none;}
+ a.ria-command-link {}
+ a.disabled {
+   pointer-events: none;
+   cursor: default;
+   text-decoration: none !important;
+   color: silver !important;
+}
+
+.ria-template-container {
+    width: 100%;
+    height: 100%;
+    border-style: none;
+    margin: 0px;
+    padding: 0px;
+    overflow: inherit;
+}
+
+.ria-content-field {}
+.ria-content-field input[type="text"] {width: 85%; min-width: 100px;}
+.ria-content-field textarea {width: 85%; min-width: 100px;}
+.ria-content-field select {width: 85%; min-width: 100px;}
+
+span.ria-required-field:after {content:"*"; vertical-align:middle; margin-left:3px;}
+
+/*Validation error styles*/
+.ria-field-error {outline:1px Solid Red;}
+span.ria-field-error {display:inline-block; outline:1px Solid Red;}
+div.ria-field-error {outline:2px Solid Red;}
+img.error-info { position:absolute; right: 5px; top: 10px; width:22px; height:22px; }
+
+div.ria-table-container
+{
+    border: none;
+    margin:0px;
+	padding:0px;
+	overflow:visible;
+	position: relative;
+	vertical-align:top;
+	height:100%; 
+	font-size: 12px;
+}
+
+/*wraps table element to display vertical scrolling*/
+div.ria-table-wrap
+{
+    padding:0px;
+    margin:0px;
+    overflow:auto;
+    overflow-x:hidden; 
+    background-color:transparent;
+    position:relative;
+    border: none;
+}
+
+/*placeholder to put new table column headers as div elements*/
+div.ria-table-header 
+{
+    color:White;
+    background-color:#336699;
+    background-image: url(img/headerbg.gif);
+    background-position: 0% 100%;
+    background-repeat: repeat-x;
+	font-weight:bold;
+	height:20px;
+	margin:0px;
+	padding:0px;
+	overflow:hidden;
+	position: relative;
+	left:0px;
+	top:0px;
+	vertical-align:top; 
+}
+
+/*new table column header*/
+div.ria-table-header div.ria-ex-column 
+{
+    border:none;
+    height:100%;
+    margin:0px;
+    background-color:transparent;
+    display:inline-block;
+    overflow:hidden;
+    vertical-align:top;
+    outline: none;
+}
+
+table.ria-data-table
+{
+    width: 100%; 
+    border:none;
+    border-left: 1px Ridge DimGray;
+    border-right: 1px Ridge DimGray;
+    border-collapse: collapse;
+    table-layout:fixed;
+    margin:0px;
+}
+
+table.ria-data-table td
+{
+    vertical-align:middle; 
+    text-align: left; 
+    border:1px Ridge DimGray;
+    padding: 0px;
+    margin: 0px;
+}
+
+table.ria-data-table td div.cell-div
+{
+   width:auto;
+   height:100%;
+   margin:0px;
+   padding: 1px 3px 1px 3px;
+   background-color:transparent;
+   border: none;
+   overflow:hidden;
+}
+
+/*hides real table header*/
+table.ria-data-table th
+{
+    background-color: transparent;
+	border:none;
+	height:0px;
+	margin:0px;
+	padding:0px;
+	overflow:hidden;
+}
+
+
+div.ria-table-header div.ria-ex-column div.selected
+{
+  
+}
+
+
+/* Div element inside expander column cell */
+div.ria-table-header div.ria-ex-column div.row-expander
+{
+    
+}
+
+/* Div element inside actions column cell */
+div.ria-table-header div.ria-ex-column div.row-actions
+{
+    
+}
+
+/* Div element inside row selector column cell */
+div.ria-table-header div.ria-ex-column div.row-selector
+{
+    text-align:center;
+}
+
+div.ria-table-header div.ria-ex-column div.data-column
+{
+    padding-left: 1em;
+    text-align:left;
+}
+
+/* Sorting icon in the sortable table column header */
+div.ria-table-header div.ria-ex-column div.sortable
+{
+    background: url('img/column-sortable.png') no-repeat 85% 0%;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Ascending sorted icon in the table column header */
+div.ria-table-header div.ria-ex-column div.sort-asc
+{
+    background: url('img/column-asc.png') no-repeat 85% 0%;
+}
+
+/* Descending sorted icon in the table column header */
+div.ria-table-header div.ria-ex-column div.sort-desc
+{
+    background: url('img/column-desc.png') no-repeat 85% 0%;
+}
+
+table.ria-data-table td.row-expanded div.cell-div
+{
+    background: url('img/minus.png') no-repeat center;
+}
+
+table.ria-data-table td.row-collapsed div.cell-div
+{
+    background: url('img/plus.png') no-repeat center;
+}
+
+table.ria-data-table td.row-expander
+{
+   width:30px;
+   cursor:pointer;
+}
+
+table.ria-data-table td div.cell-div
+{
+   min-height:15px;
+   min-width:15px;
+   padding-left:5px;
+   margin:0px;
+   text-align:left;
+   vertical-align: middle;
+   height:100%;
+}
+
+
+table.ria-data-table td.row-expander div.cell-div
+{
+   padding:0px;
+   text-align:center;
+   vertical-align: middle;
+   width:100%;
+   height:100%;
+}
+
+table.ria-data-table td.row-actions div.cell-div
+{
+   
+}
+
+table.ria-data-table td.row-selector div.cell-div
+{
+   padding:0px;
+   text-align:center;
+   width:100%;
+}
+
+table.ria-data-table tr {background-color:White;}
+table.ria-data-table tr.row-highlight {background-color:Gray !important; color: White !important;}
+table.ria-data-table tr.row-highlight div.cell-div {background-color:transparent !important; color:inherit !important;}
+table.ria-data-table tr.row-deleted {display:none;}
+table.ria-data-table tr.row-error {border:1px Solid Red;}
+table.ria-data-table tr.row-ok {border:1px Solid Green;}
+
+/*hides real table header row*/
+table.ria-data-table tr.ria-col-info 
+{
+	background-color: transparent;
+	border:none;
+	height:0px;
+	margin:0px;
+	padding:0px;
+}
+
+table.ria-data-table tr.row-details > td
+{
+   width:100%;
+   height:100%;
+   padding:2px;
+   text-align:left;
+   vertical-align: middle;
+   background-color: Silver;
+}
+
+/*Pager styles*/
+.ria-data-pager
+{
+	font-family: Frutiger Linotype, Trebuchet MS, Tahoma, Arial;
+	font-size:10pt;
+	color:white;
+	margin-top: 8px;
+}
+
+.ria-data-pager .pager-info
+{
+	font-family: Frutiger Linotype, Trebuchet MS, Tahoma, Arial;
+	font-size:10pt;
+	padding:2px;
+}
+
+.ria-data-pager .pager-current-page
+{
+	font-family: Frutiger Linotype, Trebuchet MS, Tahoma, Arial;
+	font-size:10pt;
+	font-weight:bold; 
+	color: #000000;
+	background-color:#ffffcc;
+	border: 1px Ridge DimGray;
+	padding:2px;
+	margin:1px;
+}
+
+.ria-data-pager .pager-other-page
+{
+	font-family: Frutiger Linotype, Trebuchet MS, Tahoma, Arial;
+	font-size:10pt;
+	background-color: #f0f1f2;
+	padding:2px;
+	margin:1px;
+}
+
+/*StackPanel styles*/
+.ria-stackpanel
+{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+.ria-stackpanel div.stackpanel-item
+{
+   
+}
+
+.ria-stackpanel div.current-item
+{
+  	outline: 1px dashed DimGray;
+}   
+
+/*Dataform styles*/
+.ria-dataform
+{
+    padding:5px;
+    position:relative;
+}

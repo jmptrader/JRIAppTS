@@ -1,0 +1,15 @@
+﻿{
+    "compilerOptions": {
+        "module": "amd",
+        "target": "ES5",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "../../built/jriapp.js",
+        "declaration": true,
+        "sourceMap": false
+    },
+    "files": [
+        "app.ts"
+    ]
+}

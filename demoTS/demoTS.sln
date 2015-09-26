@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demoTS", "demoTS\demoTS.csproj", "{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spaAMD", "spaAMD\spaAMD.csproj", "{9B3FF3FA-3E8B-4BD4-9C76-0401A658CDCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jriappTS", "jriappTS", "{6786B9DC-6EA4-45B2-9757-B08280912C32}"
+	ProjectSection(SolutionItems) = preProject
+		jriappTS\jriapp.d.ts = jriappTS\jriapp.d.ts
+		jriappTS\jriapp_strings.d.ts = jriappTS\jriapp_strings.d.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", "{A699BD25-5FAA-4B9F-AC4D-D5FA3880B0FE}"
+	ProjectSection(SolutionItems) = preProject
+		jriappTS\thirdparty\jquery.d.ts = jriappTS\thirdparty\jquery.d.ts
+		jriappTS\thirdparty\moment.d.ts = jriappTS\thirdparty\moment.d.ts
+		jriappTS\thirdparty\qtip2.d.ts = jriappTS\thirdparty\qtip2.d.ts
+		jriappTS\thirdparty\require.d.ts = jriappTS\thirdparty\require.d.ts
+		jriappTS\thirdparty\sse.d.ts = jriappTS\thirdparty\sse.d.ts
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3FF3FA-3E8B-4BD4-9C76-0401A658CDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3FF3FA-3E8B-4BD4-9C76-0401A658CDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3FF3FA-3E8B-4BD4-9C76-0401A658CDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3FF3FA-3E8B-4BD4-9C76-0401A658CDCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A699BD25-5FAA-4B9F-AC4D-D5FA3880B0FE} = {6786B9DC-6EA4-45B2-9757-B08280912C32}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,139 @@
+﻿@using System.Text
+@using RIAPP.DataService
+@using RIAppDemo.BLL.DataServices
+@using RIAppDemo.Utils
+
+@{
+    Layout = "~/Views/Shared/_LayoutDemo.cshtml";
+}
+
+@{
+    ViewBag.Title = "Single Page Application Demo";
+}
+
+@section CssImport
+{
+}
+
+@section JSImport
+{
+    <script type="text/javascript">
+        var require ={
+            baseUrl: "@Url.Content("~/Scripts/RIAppDemo/SPA/")",
+            urlArgs: "bust=v2.0.6.0",
+            waitSeconds: 10
+        };
+    </script>
+    <script data-main="SPAConfig.js" type="text/javascript" src="@Url.Content("~/Scripts/require.js",true)"></script>
+}
+
+<style type="text/css">
+    .space {
+        width:10px;
+        display:inline-block;
+    }
+
+    #demoHeader label {
+        color: Blue;
+    }
+
+    #demoContent {
+        overflow: visible;
+        height: 500px;
+        vertical-align: top;
+    }
+
+    .customerTableWrap {
+        height: 550px;
+        width: 100%;
+    }
+
+   .orderDetailTableWrap {
+        max-height: 180px;
+        width: 100%;
+    }
+
+    .custInfo {
+        color: Blue;
+    }
+
+    .custEdit {
+    }
+
+    .listbox-edit select {
+        width: 75%;
+    }
+
+    .qtyEdit > input[type="text"] {
+        min-width: 20px;
+        width: 45px;
+    }
+
+    form.customerInfo {
+        width: 100%;
+        padding: 15px;
+    }
+
+ 
+    div.ria-dataform .addressLine {
+        margin-bottom: 2px;
+        margin-top: 2px;
+    }
+
+    div.ria-dataform .addressLabel {
+        display: inline-block;
+        width: 9em;
+        color: Blue;
+    }
+
+    div.ria-dataform .address {
+    }
+
+    .autocompleteTableWrap {
+        max-height: 220px;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .autocompleteSalePTableWrap {
+        height: 130px;
+        width: 100%;
+    }
+
+    .autocompleteTableHeader {
+        display: none;
+    }
+
+    table.ria-data-table tr:nth-child(even) {
+        background-color: #ECF2F6;
+    }
+
+    .addressTableWrap {
+        height: 100px;
+        width: 100%;
+    }
+
+    .addressTableHeader {
+    }
+
+    .findAddrTableWrap {
+        height: 95%;
+        width: 100%;
+    }
+</style>
+
+<script type="text/javascript">
+    var mainOptions= {};
+    mainOptions.images_path = '@Url.Content("~/Scripts/jriapp/img/")';
+    mainOptions.service_url = '@Url.RouteUrl("Default",new {controller="RIAppDemoService", action=""})';
+    mainOptions.permissionInfo =  @Html.Action("PermissionsInfo", "RIAppDemoService"); 
+    mainOptions.spa_template1_url = '@Url.Action("SPADemoTemplate1", "Templates")';
+    mainOptions.spa_template2_url = '@Url.Action("SPADemoTemplate2", "Templates")';
+    mainOptions.spa_template3_url = '@Url.Action("SPADemoTemplate3", "Templates")';
+</script>
+
+<h2  style="display:inline-block;">@ViewBag.Title</h2><span class="space"></span><span>is based on new element view - <span style="color:blue;">dynacontent</span></span>
+<div id="demoContent" data-bind="{this.isBusy,to=dbContext.isBusy}" data-view="name=busy_indicator">
+    <div id="demoDynaContent" data-bind="{this.templateID,to=viewName,source=customerVM.uiMainView}{this.dataContext,source=customerVM}{this.animation,to=animation,source=customerVM.uiMainView}" data-view="name=dynacontent"></div>
+</div>

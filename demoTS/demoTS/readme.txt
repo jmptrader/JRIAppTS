@@ -1,0 +1,5 @@
+	-This project holds user modules which are used in the RIAppDemo project in demo pages.
+	-The modules used by the SPADemo HTML page are separated into another project - spaAMD.
+	-The demo pages use static javascript loading using script tag.
+	-But the SPADemo page loads user modules using  Asynchronous Module Definition (AMD) by requireJS.
+	-That's why the use different projects.

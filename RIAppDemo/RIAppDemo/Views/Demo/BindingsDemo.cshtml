@@ -1,0 +1,83 @@
+﻿@using System.Text
+@using RIAppDemo.BLL.DataServices
+@using RIAppDemo.Utils
+@{
+    Layout = "~/Views/Shared/_LayoutDemo.cshtml";
+}
+@{
+    ViewBag.Title = "DataBinding Demo";
+}
+
+@section CssImport
+{
+}
+
+@section JSImport
+{
+    <script src="@Url.Content("~/Scripts/RIAppDemo/common.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/demoDB.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/bindingsDemo.js",true)" type="text/javascript"></script>
+}
+<style type="text/css">
+#demoHeader label
+{
+    color: Blue;
+}
+
+#demoContent
+{
+    overflow:visible; 
+    height:600px;
+    vertical-align:top;
+    position:relative;
+}
+
+#demoContent > fieldset {border-radius: 5px;}
+#demoContent fieldset > legend {color:Blue; font-weight:bold;}
+#demoContent .radioItem {display:inline-block; margin:4px; padding:4px;}
+
+.stackPanelItem { width:170px;}
+.stackPanelItem fieldset {border-radius: 5px;}
+.stackPanelItem fieldset legend {color:Blue; font-weight:bold;}
+</style>
+
+
+<script type="text/javascript">
+    RIAPP.global.addOnLoad(function (sender, a) {
+        var global = sender;
+        //initialize images folder path
+        global.defaults.imagesPath = '@Url.Content("~/Scripts/jriapp/img/")';
+        //create and then start application
+        var thisApp = new RIAPP.BINDDEMO.DemoApplication(RIAPP.BINDDEMO.appOptions);
+        thisApp.startUp(function(app){
+            //just an example of how to create the data binding in code
+            //store the reference to the Binding's instance - in case we need to destroy it when we want
+            //BUT - even without storing the reference it can not be removed by garbage collector, because it subscribed to property changes
+            //in the TestObject (and TestObject's instance hold references to the subscriber)
+            //P.S.- we really don't need to use data binding here, because we can do the same logic inside the TestObject's code
+            app.UC.createdBinding = app.bind({
+                sourcePath: 'testProperty1', targetPath: 'testProperty2',
+                source: app.testObject, mode: 'OneWay',
+                target: app.testObject, converter: app.getConverter('uppercaseConverter'), converterParam: null
+            });
+        });
+    });
+</script>
+
+<h2  style="display:inline-block;">@ViewBag.Title</h2>
+
+<!--using dataform is convenient because it set datacontext scope for all its content-->
+<div id="demoContent">
+<fieldset>
+    <legend>HTML elements are data bounded to the TestObject properties</legend>
+     <div style="margin:5px 5px 5px 0px;">
+        <label>testProperty1: </label>
+        <!--without updateOnKeyUp option, value is updated only when textbox looses focus-->
+        <input type="text" data-bind="{this.value,to=testProperty1,mode=TwoWay,source=testObject}" data-view="options:{updateOnKeyUp=true}" style="width:250px"/>
+        &nbsp;<span data-bind="{this.value,to=testProperty2,source=testObject}" ></span>
+     </div>
+     <div style="margin:5px 5px 5px 0px;"><label for="months">Months: </label><select size="1" style="width:150px" data-bind="{this.dataSource,to=months,source=testObject}{this.selectedValue,to=month,mode=TwoWay,source=testObject}" data-view="options:{valuePath=key,textPath=val}"></select></div>
+     <div style="margin:5px 5px 5px 0px;"><label for="sends">Formats: </label><select size="1" style="width:220px" data-bind="{this.dataSource,to=formats,source=testObject}{this.selectedValue,to=format,mode=TwoWay,source=testObject}" data-view="options:{valuePath=key,textPath=val}"></select></div>
+</fieldset>
+ <a class="btn btn-info btn-small" style="margin:5px 5px 5px 0px;" data-bind="{this.command,to=testCommand,source=testObject}{this.toolTip,to=testToolTip,source=testObject}">Test command</a>
+</div>

@@ -1,0 +1,118 @@
+﻿@using System.Text
+@using RIAppDemo.BLL.DataServices
+@using RIAppDemo.Utils
+@{
+    Layout = "~/Views/Shared/_LayoutDemo.cshtml";
+}
+@{
+    ViewBag.Title = "Collections Demo";
+}
+
+@section CssImport
+{
+}
+
+@section JSImport
+{
+    <script src="@Url.Content("~/Scripts/RIAppDemo/common.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/demoDB.js",true)" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/RIAppDemo/collectionDemo.js",true)" type="text/javascript"></script>
+}
+<style type="text/css">
+#demoHeader label
+{
+    color: Blue;
+}
+
+#demoContent
+{
+    overflow:visible; 
+    height:600px;
+    vertical-align:top;
+    position:relative;
+}
+
+#demoContent > fieldset {border-radius: 5px;}
+#demoContent fieldset > legend {color:Blue; font-weight:bold;}
+#demoContent .radioItem {display:inline-block; margin:4px; padding:4px;}
+
+.stackPanelItemV { 
+    min-width:120px; 
+    width:auto;
+    height:auto;
+    margin: 3px 0px 3px 0px;
+    padding:4px;
+    background-color:ButtonFace;
+    color: ButtonText;
+}
+
+.stackPanelItemH {
+    width:140px; height:auto; 
+    margin:0px 3px 0px 3px;
+    padding:4px;
+    background-color:ButtonFace;
+    color: ButtonText;
+}
+
+.stackPanelItem fieldset {border-radius: 5px;}
+.stackPanelItem fieldset legend {color:Blue; font-weight:bold;}
+</style>
+
+
+<script type="text/javascript">
+    RIAPP.global.addOnLoad(function (sender, a) {
+        var global = sender;
+        //initialize images folder path
+        global.defaults.imagesPath = '@Url.Content("~/Scripts/jriapp/img/")';
+        //create and then start application
+        var thisApp = new RIAPP.COLLDEMO.DemoApplication(RIAPP.COLLDEMO.appOptions);
+        thisApp.startUp();
+    });
+</script>
+
+<h2  style="display:inline-block;">@ViewBag.Title</h2>
+
+<!--using dataform is convenient because it set datacontext scope for all its content-->
+<div id="demoContent">
+<fieldset>
+    <legend>Radios elements data binding example (using simple collections in view models)</legend>
+    <div class="radioItem">
+        <input type="radio" name="radioItem" data-bind="{this.checked,to=radioValue,mode=TwoWay,converter=radioValueConverter,converterParam=radioValue1,source=demoVM}" />
+        <span data-bind="{this.value,to=radioValues['radioValue1'].value,source=demoVM}{this.toolTip,to=radioValues['radioValue1'].comment,source=demoVM}"></span>
+    </div>
+    <div class="radioItem">
+        <input type="radio" name="radioItem" data-bind="{this.checked,to=radioValue,mode=TwoWay,converter=radioValueConverter,converterParam=radioValue2,source=demoVM}" />
+        <span data-bind="{this.value,to=radioValues['radioValue2'].value,source=demoVM}{this.toolTip,to=radioValues['radioValue2'].comment,source=demoVM}"></span>
+    </div>
+        <div class="radioItem">
+        <input type="radio" name="radioItem" data-bind="{this.checked,to=radioValue,mode=TwoWay,converter=radioValueConverter,converterParam=radioValue3,source=demoVM}" />
+        <span data-bind="{this.value,to=radioValues['radioValue3'].value,source=demoVM}{this.toolTip,to=radioValues['radioValue3'].comment,source=demoVM}"></span>
+    </div>
+    <div class="radioItem">
+        <input type="radio" name="radioItem" data-bind="{this.checked,to=radioValue,mode=TwoWay,converter=radioValueConverter,converterParam=radioValue4,source=demoVM}" />
+        <span data-bind="{this.value,to=radioValues['radioValue4'].value,source=demoVM}{this.toolTip,to=radioValues['radioValue4'].comment,source=demoVM}"></span>
+    </div>
+</fieldset>
+    <h3>Demo of the vertical and horizontal StackPanels &nbsp;(count:&nbsp;<span data-bind="{this.value,to=historyList.count,source=demoVM}"></span>)</h3>
+    <!--example of using stackpanel for vertical and horizontal list view-->
+    <div style="border: 1px solid gray;float:left;width:150px; min-height:65px; max-height:250px; overflow:auto;" data-bind="{this.dataSource,to=historyList,source=demoVM}" data-view="name=stackpanel,options:{templateID:stackPanelItemTemplateV,orientation:vertical}"></div>
+    <div style="border: 1px solid gray;float:left;height:65px; min-width:145px; max-width:650px; overflow:auto; margin-left:15px;" data-bind="{this.dataSource,to=historyList,source=demoVM}" data-view="name=stackpanel,options:{templateID:stackPanelItemTemplateH,orientation:horizontal}"></div>
+    <br style="clear:both" />
+    <button class="btn btn-info btn-small" style="margin:5px 5px 5px 0px;" data-bind="{this.command,to=clearListCommand,mode=OneWay,source=demoVM}">Clear list</button>
+</div>
+
+@section RiaTemplates
+{
+     <div id="stackPanelItemTemplateV" data-role="template" class="stackPanelItemV">
+        <strong><span style="color: Blue;" data-bind="{this.value,to=radioValue}"></span>
+        </strong>
+        <br />
+        Time:&nbsp;<span data-bind="{this.value,to=time,converter=dateTimeConverter,converterParam='HH:mm:ss'}"></span>
+    </div>
+    <div id="stackPanelItemTemplateH" data-role="template" class="stackPanelItemH">
+        <strong><span style="color: Blue;" data-bind="{this.value,to=radioValue}"></span>
+        </strong>
+        <br />
+        Time:&nbsp;<span data-bind="{this.value,to=time,converter=dateTimeConverter,converterParam='HH:mm:ss'}"></span>
+    </div>
+}

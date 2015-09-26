@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{4BCCAAB0-F3B9-44FE-B237-ECE697EAA6BF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="main\interface.ts" />
+    <TypeScriptCompile Include="main\core_modules.ts" />
+    <TypeScriptCompile Include="modules\converter.ts" />
+    <TypeScriptCompile Include="modules\binding.ts" />
+    <TypeScriptCompile Include="modules\parser.ts" />
+    <TypeScriptCompile Include="modules\baseElView.ts" />
+    <TypeScriptCompile Include="modules\template.ts" />
+    <TypeScriptCompile Include="modules\mvvm.ts" />
+    <TypeScriptCompile Include="modules\baseContent.ts" />
+    <TypeScriptCompile Include="modules\collection.ts" />
+    <TypeScriptCompile Include="modules\db.ts" />
+    <TypeScriptCompile Include="modules\datadialog.ts" />
+    <TypeScriptCompile Include="modules\datagrid.ts" />
+    <TypeScriptCompile Include="modules\pager.ts" />
+    <TypeScriptCompile Include="modules\stackpanel.ts" />
+    <TypeScriptCompile Include="modules\listbox.ts" />
+    <TypeScriptCompile Include="modules\dataform.ts" />
+    <TypeScriptCompile Include="main\baseobj.ts" />
+    <TypeScriptCompile Include="main\globalobj.ts" />
+    <TypeScriptCompile Include="thirdparty\qtip2.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="main\app.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="modules\datepicker.ts" />
+    <TypeScriptCompile Include="main\baseutils.ts" />
+    <TypeScriptCompile Include="jriapp_strings.d.ts" />
+    <TypeScriptCompile Include="langs\jriapp_en.ts" />
+    <TypeScriptCompile Include="langs\jriapp_ru.ts" />
+    <TypeScriptCompile Include="modules\tabs.ts" />
+    <TypeScriptCompile Include="modules\dynacontent.ts" />
+    <Content Include="thirdparty\moment.d.ts" />
+    <TypeScriptCompile Include="modules\utils.ts" />
+    <TypeScriptCompile Include="main\consts.ts" />
+    <TypeScriptCompile Include="modules\defaults.ts" />
+    <TypeScriptCompile Include="modules\errors.ts" />
+    <Content Include="thirdparty\jquery.d.ts" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>jriappTS</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5965</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1401/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptIncludeComments>true</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptIncludeComments>false</TypeScriptIncludeComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.6\tsc.exe"   "$(ProjectDir)main\app.ts" --d --noImplicitAny --removeComments --target ES5 --out "$(ProjectDir)\..\built\jriapp.js"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

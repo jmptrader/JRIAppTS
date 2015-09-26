@@ -1,0 +1,219 @@
+﻿@Master['MasterDemo']
+
+@Section['CssImport']
+<style type="text/css">
+    #demoHeader label {
+        color: Blue;
+    }
+
+    #demoContent {
+        overflow: visible;
+        height: 570px;
+        vertical-align: top;
+    }
+
+    .productTableWrap {
+        height: 100%;
+        width: 100%;
+    }
+
+    .productTableContainer {
+    }
+
+    .productTableHeader {
+    }
+
+    .orderDetailTableWrap {
+        max-height: 180px;
+        width: 100%;
+    }
+
+    .number-display {
+        color: Blue;
+        font-weight: bold;
+    }
+
+    .number-edit input[type="text"] {
+        color: Black;
+    }
+
+    .name-display {
+        color: Blue;
+        font-weight: bold;
+    }
+
+    .name-edit input[type="text"] {
+        color: Black;
+    }
+
+    .name-edit textarea {
+        color: Black;
+    }
+
+    .listbox-edit select {
+        width: 75%;
+    }
+
+    .selectorCol {
+        vertical-align: middle;
+    }
+
+    .selectorCell {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .rowInactive {
+        text-decoration: line-through;
+        color: Gray;
+    }
+
+    table.ria-data-table tr:nth-child(even) {
+        background-color: #ECF2F6;
+    }
+
+    .ui-datepicker select.ui-datepicker-month,
+    .ui-datepicker select.ui-datepicker-year {
+        min-height: 28px;
+    }
+
+    .ui-datepicker select.ui-datepicker-month {
+        width: 80px;
+        margin-right:3px;
+    }
+</style>
+@EndSection
+
+@Section['JSImport']
+    <script src="@Model.siteBase/scripts/RIAppDemo/common.js" type="text/javascript"></script>
+    <script src="@Model.siteBase/scripts/RIAppDemo/header.js" type="text/javascript"></script>
+    <script src="@Model.siteBase/scripts/RIAppDemo/demoDB.js" type="text/javascript"></script>
+    <script src="@Model.siteBase/scripts/RIAppDemo/ssevents.js" type="text/javascript"></script>
+    <script src="@Model.siteBase/scripts/RIAppDemo/gridDemo.js" type="text/javascript"></script>
+<script type="text/javascript">
+    /*
+      //this varable is declared in the GRIDDEMO module
+       export var mainOptions: IMainOptions = {  service_url: null,
+            permissionInfo: null,
+            images_path: null,
+            upload_thumb_url: null,
+            templates_url: null,
+            productEditTemplate_url: null,
+            sizeDisplayTemplate_url: null,
+            modelData: null,
+            categoryData: null
+        };
+        //The Application is also declared and started in there
+    */
+
+    (function(ops){
+        ops.images_path = '@Model.siteBase/scripts/jriapp/img/';
+        ops.service_url = '@Model.siteBase/demosvc';
+        ops.templates_url = '@Model.siteBase/demosvc/template/DataGridDemo';
+        ops.upload_thumb_url = '@Model.siteBase/demosvc/thumbnail';
+        ops.productEditTemplate_url = '@Model.siteBase/demosvc/template/productEditTemplate';
+        ops.sizeDisplayTemplate_url = '@Model.siteBase/demosvc/template/sizeDisplayTemplate';
+    })(RIAPP.GRIDDEMO.mainOptions);
+</script>
+@EndSection
+
+@Section['Body']
+<h2  style="display:inline-block;">@Model.Title</h2>
+<header id="title" style="width:99%; border:1px Solid LightBlue; padding:5px;margin-bottom:5px;-moz-border-radius: 4px;border-radius:4px;">
+<a href="#" id="expander" style="margin-left:2px;" data-bind="{this.command,to=expanderCommand,mode=OneWay,source=headerVM}" data-view="name=expander"></a>
+<span style="margin-left:5px;">Filter</span>
+</header>
+<form id="demoHeader" data-bind="{this.dataContext,source=productVM}" data-view="name=dataform">
+    <table>
+        <tr>
+            <td>
+              <label for="prodNum">Product Number:</label>
+              <input type="text" id="prodNum" placeholder="Product number" data-bind-value="{this.value,to=filter.prodNumber,mode=TwoWay}" data-bind-toolTip="{this.toolTip,to=filter.searchTextToolTip}" />
+            </td>
+            <td>
+               <label for="prodName">Name:</label>
+               <input type="text" id="prodName" placeholder="Name" data-bind-1="{this.value,to=filter.name,mode=TwoWay}" data-bind-2="{this.toolTip,to=filter.searchTextToolTip}"  />
+            </td>
+            <td>
+               <label for="prodMCat">Main Category:</label>
+                <select id="prodMCat" size="1" class="span3"
+                        data-bind-1="{this.dataSource,to=filter.ParentCategories}"
+                        data-bind-2="{this.selectedValue,to=filter.parentCategoryID,mode=TwoWay}"
+                        data-view="options:{valuePath=ProductCategoryID,textPath=Name}"></select>
+            </td>
+            <td>
+                <label for="prodSCat">Sub Category:</label>
+                <select id="prodSCat" size="1" class="span2"
+                        data-bind-1="{this.dataSource,to=filter.ChildCategories}"
+                        data-bind-2="{this.selectedValue,to=filter.childCategoryID,mode=TwoWay}"
+                        data-bind-3="{this.selectedItem,to=filter.selectedCategory,mode=TwoWay}"
+                        data-bind-4="{this.toolTip,to=filter.selectedCategory.Name}"
+                        data-view="options:{valuePath=ProductCategoryID,textPath=Name}"></select>
+            </td>
+            <td>
+                <label for="prodMod">Model:</label>
+                <select id="prodMod" size="1" class="span2"
+                        data-bind-1="{this.dataSource,to=filter.ProductModels}"
+                        data-bind-2="{this.selectedValue,to=filter.modelID,mode=TwoWay}"
+                        data-bind-3="{this.toolTip,to=filter.selectedModel.Name}"
+                        data-bind-4="{this.selectedItem,to=filter.selectedModel,mode=TwoWay}"
+                        data-view="options:{valuePath=ProductModelID,textPath=Name}"></select>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="5">
+              <div style="display:inline-block;">
+              <label for="saleStart1">Sales Start Date Begin:</label>
+              <input type="text" id="saleStart1" placeholder="Enter Date" data-bind="{this.value,to=filter.saleStart1,mode=TwoWay,converter=dateConverter}" data-view="name:datepicker,options={datepicker:{ showOn:button,yearRange:'-15:c',changeMonth: true,changeYear: true }}"/>
+              </div>
+              <div style="display:inline-block; margin-left:5px;">
+              <label for="saleStart2">Sales Start Date End:</label>
+              <input type="text" id="saleStart2" placeholder="Enter Date" data-bind="{this.value,to=filter.saleStart2,mode=TwoWay,converter=dateConverter}" data-view="name:datepicker,options={datepicker:{ showOn:button,yearRange:'-15:c',changeMonth: true,changeYear: true }}" />
+              </div>
+            </td>
+        </tr>
+    </table>
+    <!--this nested dataform is only to test how the dataform nesting is working!!! it is not needed here, really.-->
+    <div  data-bind="{this.dataContext}" data-view="name=dataform">
+        <a id="btn_filter" class="btn btn-info btn-small" data-bind="{this.command,to=loadCommand}"><i class="icon-search"></i>&nbsp;Filter</a>
+        <a id="btn_reset" class="btn btn-info btn-small" data-bind="{this.command,to=filter.resetCommand}"><i class="icon-retweet"></i>&nbsp;Reset</a>
+    </div>
+</form>
+
+<div id="demoContent" data-bind="{this.isBusy,to=dbContext.isBusy}" data-view="name=busy_indicator">
+    <div style="height:85%; vertical-align:top;">
+        <table data-name="gridProducts" data-bind1="{this.dataSource,to=dbSet,source=productVM}"
+               data-bind2="{this.grid,to=grid,mode=BackWay,source=productVM}"
+               data-bind3="{this.stateProvider,to=rowStateProvider,source=productVM}"
+               data-view="options={wrapCss:productTableWrap,containerCss:productTableContainer,headerCss:productTableHeader,rowStateField:IsActive,isHandleAddNew:true,isCanEdit:true,editor:{templateID:productEditTemplate,width:550,height:650,submitOnOK:true,title:'Product editing'},details:{templateID:productDetailsTemplate}}">
+            <thead>
+                <tr>
+                    <th data-column="width:35px,type:row_expander"></th>
+                    <th data-column="width:50px,type:row_actions"></th>
+                    <th data-column="width:40px,type:row_selector,rowCellCss:selectorCell,colCellCss:selectorCol"></th>
+                    <th data-column="width:100px,sortable:true,title:ProductNumber" data-content="fieldName:ProductNumber,css:{displayCss:'number-display',editCss:'number-edit'},readOnly:true"></th>
+                    <th data-column="width:25%,sortable:true,title:Name" data-content="fieldName:Name,readOnly:true"></th>
+                    <th data-column="width:90px,title:'Weight',sortable:true" data-content="fieldName:Weight,readOnly:true"></th>
+                    <th data-column="width:15%,title=CategoryID,sortable:true,sortMemberName=ProductCategoryID" data-content="fieldName=ProductCategoryID,name:lookup,options:{dataSource=dbContext.dbSets.ProductCategory,valuePath=ProductCategoryID,textPath=Name},readOnly:true"></th>
+                    <th data-column="width:100px,sortable:true,title='SellStartDate'" data-content="fieldName=SellStartDate,readOnly:true"></th>
+                    <th data-column="width:100px,sortable:true,title='SellEndDate'" data-content="fieldName=SellEndDate,readOnly:true"></th>
+                    <th data-column="width:90px,sortable:true,title='IsActive',sortMemberName=SellEndDate" data-content="fieldName=IsActive,readOnly:true"></th>
+                    <th data-column="width:10%,title=Size,sortable:true,sortMemberName=Size" data-content="template={displayID=sizeDisplayTemplate}"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+     <div style="margin-top:40px;text-align:left; border:none;width:100%;height:15%">
+        <!--pager-->
+        <div style="float:left;" data-bind="{this.dataSource,to=dbSet,source=productVM}" data-view="name=pager,options={sliderSize:20,hideOnSinglePage=false}"></div>
+        <div style="float:left; padding-left:10px;padding-top:10px;"><span>Total:</span>&nbsp;<span data-bind="{this.value,to=totalCount,source=productVM.dbSet}"></span>,&nbsp;&nbsp;<span>Selected:</span>&nbsp;<span data-bind="{this.value,to=selectedCount,source=productVM}"></span></div>
+
+        <button class="btn btn-info btn-small" style="float:right;" data-bind="{this.command,to=addNewCommand,mode=OneWay,source=productVM}"><i class="icon-plus"></i>&nbsp;New Product</button>
+     </div>
+ </div>
+@EndSection
+
+@Section['RiaTemplates']
+  <!--no ria template-->
+@EndSection

@@ -1,0 +1,10 @@
+	-This project holds modules which are used in the RIAppDemo project on the SPADemo HTML page.
+	-These modules are loaded using  Asynchronous Module Definition (AMD) by requireJS.
+	-The other demo pages use static loading using script tag.
+	-That's why i separated SPADemo files into a single typescript project.
+	-SPADemo page shows capabilities of the framework for creating Single Page Applications.
+	-It also shows that you can load user modules using requireJS.
+	-Besides this it also shows that ViewModels have no trace of any UI controls (like DataGrid) and don't manipulate the DOM.
+	-They are perfectly testable.
+	-
+	-P.S. demoTS project contains typescript modules for all other demo pages in the RIAppDemo project.
